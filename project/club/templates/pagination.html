@@ -1,0 +1,36 @@
+{% if page.has_other_pages %}
+<div style="display: flex; justify-content: center; align-items: center; gap: 10px; margin: 40px 0; flex-wrap: wrap;">
+    
+    {% if page.has_previous %}
+        <a href="?page=1" class="btn" style="padding: 8px 12px; font-size: 0.9rem;">« First</a>
+        <a href="?page={{ page.previous_page_number }}" class="btn" style="padding: 8px 12px; font-size: 0.9rem;">‹ Previous</a>
+    {% else %}
+        <span style="padding: 8px 12px; color: rgba(255,255,255,0.5); font-size: 0.9rem;">« First</span>
+        <span style="padding: 8px 12px; color: rgba(255,255,255,0.5); font-size: 0.9rem;">‹ Previous</span>
+    {% endif %}
+    
+    <div style="display: flex; gap: 5px; align-items: center;">
+        {% for num in page.paginator.page_range %}
+            {% if page.number == num %}
+                <span style="padding: 8px 12px; background: white; color: #667eea; border-radius: 5px; font-weight: bold;">{{ num }}</span>
+            {% elif num > page.number|add:'-3' and num < page.number|add:'3' %}
+                <a href="?page={{ num }}" style="padding: 8px 12px; background: rgba(255,255,255,0.2); color: white; border-radius: 5px; text-decoration: none; transition: background 0.3s;">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+    </div>
+    
+    {% if page.has_next %}
+        <a href="?page={{ page.next_page_number }}" class="btn" style="padding: 8px 12px; font-size: 0.9rem;">Next ›</a>
+        <a href="?page={{ page.paginator.num_pages }}" class="btn" style="padding: 8px 12px; font-size: 0.9rem;">Last »</a>
+    {% else %}
+        <span style="padding: 8px 12px; color: rgba(255,255,255,0.5); font-size: 0.9rem;">Next ›</span>
+        <span style="padding: 8px 12px; color: rgba(255,255,255,0.5); font-size: 0.9rem;">Last »</span>
+    {% endif %}
+    
+</div>
+
+<div style="text-align: center; color: white; font-size: 0.9rem; margin-top: 10px;">
+    Page {{ page.number }} of {{ page.paginator.num_pages }} | 
+    Showing {{ page.start_index }} - {{ page.end_index }} of {{ page.paginator.count }} members
+</div>
+{% endif %}

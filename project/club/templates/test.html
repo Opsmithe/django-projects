@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}
+Testing Page
+{% endblock %}
+
+{% block content %}
+    <h1>Testing Features</h1>
+    
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+        <h3 style="color: #667eea; margin-bottom: 15px;">🍎 Fruit List Demo</h3>
+        <p style="margin-bottom: 15px;">This demonstrates Django template loops:</p>
+        
+        <ul style="list-style: none; padding: 0;">
+            {% for fruit in fruits %}
+            <li style="background: white; margin: 5px 0; padding: 10px; border-radius: 5px; border-left: 4px solid #667eea;">
+                🍓 {{ fruit|title }}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    
+    <div style="background: #e8f4fd; padding: 20px; border-radius: 10px; margin: 20px 0;">
+        <h3 style="color: #667eea; margin-bottom: 15px;">ℹ️ Template Information</h3>
+        <p><strong>Total fruits:</strong> {{ fruits|length }}</p>
+        <p><strong>Template engine:</strong> Django Templates</p>
+        <p><strong>Context variables:</strong> fruits</p>
+    </div>
+
+    <div>
+        <table border='1'>
+            <tr>
+                <th>ID</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
+            </tr>
+        {% for x in mymembers %}
+            <tr>
+                <td>{{ x.id }}</td>
+                <td>{{ x.firstname }}</td>
+                <td>{{ x.lastname }}</td>
+            </tr>
+        {% endfor %}
+        </table>
+
+    </div>
+    {% endblock %}

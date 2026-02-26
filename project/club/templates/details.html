@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ mymember.firstname }} {{ mymember.lastname }} - Tennis Club Member
+{% endblock %}
+
+{% block canonical %}
+<link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ mymember.get_absolute_url }}">
+{% endblock %}
+
+{% block meta_description %}
+<meta name="description" content="Meet {{ mymember.firstname }} {{ mymember.lastname }}, a tennis club member from {{ mymember.city }}, {{ mymember.location }}">
+{% endblock %}
+
+{% block content %}
+    <div style="max-width: 800px; margin: 0 auto; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+        <h1 style="color: #667eea; text-shadow: none;">{{ mymember.firstname }} {{ mymember.lastname }}</h1>
+        
+        <div style="background: #f8f9fa; padding: 30px; border-radius: 15px; margin: 20px 0;">
+            <div style="display: grid; gap: 15px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 1.5rem;">👤</span>
+                    <div>
+                        <strong>Full Name:</strong> {{ mymember.firstname }} {{ mymember.lastname }}
+                    </div>
+                </div>
+                
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 1.5rem;">📧</span>
+                    <div>
+                        <strong>Email:</strong> {{ mymember.email }}
+                    </div>
+                </div>
+                
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 1.5rem;">📱</span>
+                    <div>
+                        <strong>Phone:</strong> {{ mymember.phoneNumber }}
+                    </div>
+                </div>
+                
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 1.5rem;">🏙️</span>
+                    <div>
+                        <strong>City:</strong> {{ mymember.city }}
+                    </div>
+                </div>
+                
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 1.5rem;">📍</span>
+                    <div>
+                        <strong>Location:</strong> {{ mymember.location }}
+                    </div>
+                </div>
+                
+                {% if mymember.date_joined %}
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 1.5rem;">📅</span>
+                    <div>
+                        <strong>Member since:</strong> {{ mymember.date_joined }}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 1.5rem;">🎾</span>
+                    <div>
+                        <strong>Status:</strong> 
+                        {% if mymember.status == 'PL' %}
+                            <span style="color: green;">✓ Played</span>
+                        {% else %}
+                            <span style="color: orange;">○ Not Played</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="{% url 'club:members' %}" class="btn">← Back to Members</a>
+        </div>
+    </div>
+{% endblock %}
