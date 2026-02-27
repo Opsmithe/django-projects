@@ -486,3 +486,14 @@ this pattern has:
 ## adding pagination
 pagination allows as to distribute enteries into several pages. Django has a built-in pagination class that allows us to build pagination into our webpages
 
+in ```views.py````
+```bash
+def members(request):
+    mymembers = Names.objects.all() #gets all objects from Db
+    paginator = Paginator(mymembers, 3) #splits the object to three pages
+    page_number = request.GET.get('page', 1) #handle get request for pages
+    page = paginator.page(page_number)
+
+    return render(request, 'first.html', {'page': page})
+```
+- further implementation was done in pagination.html to be used across all the pages that use the pagination

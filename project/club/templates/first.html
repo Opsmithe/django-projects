@@ -1,34 +1,77 @@
 {% extends "base.html" %}
 
 {% block title %}
-Club Members
+Club Members - Tennis Club
 {% endblock %}
     
 {% block content %}
-    <div style="max-width: 1200px; margin: 0 auto;">
-        <h1>Club Members</h1>
-        <p style="text-align: center; margin-bottom: 30px; color: white; font-size: 1.1rem;">Meet our amazing tennis community members</p>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
-            {% for member in page %}
-            <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.3s ease;">
-                <h3 style="color: #667eea; margin-bottom: 10px;">{{ member.firstname }} {{ member.lastname }}</h3>
-                <p><strong>📍 City:</strong> {{ member.city }}</p>
-                <p><strong>📌 Location:</strong> {{ member.location }}</p>
-                {% if member.date_joined %}
-                <p><strong>📅 Joined:</strong> {{ member.date_joined }}</p>
-                {% endif %}
-                <div style="margin-top: 15px;">
-                    <a href="{% url 'club:member-detail' member.slug %}" class="btn" style="font-size: 0.9rem; padding: 8px 16px;">View Details</a>
+<div class="container">
+    <h1>Club Members</h1>
+    <p class="text-center text-white mb-3" style="font-size: 1.1rem;">
+        Meet our amazing tennis community members
+    </p>
+    
+    <!-- Add Member Button -->
+    <div class="text-center mb-3">
+        <a href="{% url 'club:create-member' %}" class="btn btn-success">➕ Add New Member</a>
+    </div>
+    
+    <!-- Search Form -->
+    <div class="search-form">
+        <form method="GET" action="{% url 'club:members' %}">
+            <div class="search-form-inline">
+                <div class="form-group">
+                    {{ search_form.search_query.label_tag }}
+                    {{ search_form.search_query }}
+                </div>
+                <div class="form-group">
+                    {{ search_form.status_filter.label_tag }}
+                    {{ search_form.status_filter }}
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn">🔍 Search</button>
+                    <a href="{% url 'club:members' %}" class="btn btn-secondary">Clear</a>
                 </div>
             </div>
-            {% empty %}
-            <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: white; border-radius: 10px;">
-                <p style="font-size: 1.2rem; color: #666;">No members found. Be the first to join!</p>
-            </div>
-            {% endfor %}
-        </div>
-        
-        {% include "pagination.html" %}
+        </form>
     </div>
+    
+    <!-- Display Messages -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="{% if message.tags == 'success' %}form-success{% else %}form-errors{% endif %}" style="margin-bottom: 20px;">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <div class="grid grid-auto">
+        {% for member in page %}
+        <div class="member-card">
+            <!-- Profile Picture Thumbnail -->
+            <div class="member-card-image">
+                <img src="{{ member.get_profile_picture_url }}" 
+                     alt="{{ member.firstname }} {{ member.lastname }}"
+                     class="profile-picture-thumbnail">
+            </div>
+            
+            <h3 class="member-name">{{ member.firstname }} {{ member.lastname }}</h3>
+            <p><strong>📍 City:</strong> {{ member.city }}</p>
+            <p><strong>📌 Location:</strong> {{ member.location }}</p>
+            {% if member.date_joined %}
+            <p><strong>📅 Joined:</strong> {{ member.date_joined }}</p>
+            {% endif %}
+            <div class="card-footer">
+                <a href="{% url 'club:member-detail' member.slug %}" class="btn btn-small">View Details</a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="white-box text-center" style="grid-column: 1 / -1;">
+            <p style="font-size: 1.2rem; color: #666;">No members found. Be the first to join!</p>
+        </div>
+        {% endfor %}
+    </div>
+    
+    {% include "pagination.html" %}
+</div>
 {% endblock %}

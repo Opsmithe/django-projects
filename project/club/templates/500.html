@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}
+Server Error - Tennis Club
+{% endblock %}
+
+{% block content %}
+<div class="error-container">
+    <div class="error-icon">⚠️</div>
+    
+    <h1 class="error-code error-code-500">500</h1>
+    
+    <h2 class="error-title">Internal Server Error</h2>
+    
+    <p class="error-message">
+        Oops! Something went wrong on our end. Our team has been notified and we're working to fix it.
+    </p>
+    
+    <div class="error-help">
+        <p style="color: #666; margin-bottom: 15px;">
+            <strong>What you can do:</strong>
+        </p>
+        <ul>
+            <li>✓ Try refreshing the page</li>
+            <li>✓ Go back and try again</li>
+            <li>✓ Visit our homepage</li>
+        </ul>
+    </div>
+    
+    <div class="error-actions">
+        <a href="{% url 'club:main' %}" class="btn">🏠 Go Home</a>
+        <a href="javascript:location.reload()" class="btn btn-success">🔄 Refresh Page</a>
+        <a href="javascript:history.back()" class="btn btn-secondary">← Go Back</a>
+    </div>
+    
+    <p class="error-footer">
+        Error Code: 500 | Internal Server Error
+    </p>
+</div>
+{% endblock %}

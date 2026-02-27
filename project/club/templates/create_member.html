@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% block title %}
+Add New Member - Tennis Club
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h1 class="form-title">Add New Member</h1>
+    
+    <p class="required-note">* Required fields are marked with an asterisk</p>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="{% if message.tags == 'success' %}form-success{% else %}form-errors{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <!-- IMPORTANT: enctype="multipart/form-data" is REQUIRED for file uploads -->
+    <!-- Without this, files won't be uploaded -->
+    <form method="POST" action="{% url 'club:create-member' %}" id="memberForm" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        
+        {% if form.non_field_errors %}
+            <div class="form-errors">
+                <ul>
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}" class="form-label {% if field.field.required %}form-label-required{% endif %}">
+                    {{ field.label }}
+                </label>
+                
+                {{ field }}
+                
+                {% if field.help_text %}
+                    <small class="form-help-text">{{ field.help_text }}</small>
+                {% endif %}
+                
+                {% if field.errors %}
+                    {% for error in field.errors %}
+                        <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        {% endfor %}
+        
+        <div class="form-actions">
+            <button type="submit" class="btn" id="submitBtn">Create Member</button>
+            <a href="{% url 'club:members' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('memberForm');
+    const submitBtn = document.getElementById('submitBtn');
+    
+    // Real-time validation for each input
+    const inputs = form.querySelectorAll('input[required], select[required]');
+    
+    inputs.forEach(input => {
+        // Validate on blur (when user leaves the field)
+        input.addEventListener('blur', function() {
+            validateField(this);
+        });
+        
+        // Validate on input (as user types)
+        input.addEventListener('input', function() {
+            if (this.classList.contains('error')) {
+                validateField(this);
+            }
+        });
+    });
+    
+    // Form submission validation
+    form.addEventListener('submit', function(e) {
+        let isValid = true;
+        
+        // Validate all required fields
+        inputs.forEach(input => {
+            if (!validateField(input)) {
+                isValid = false;
+            }
+        });
+        
+        if (!isValid) {
+            e.preventDefault();
+            
+            // Show error message
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'form-errors';
+            errorDiv.innerHTML = '<p>Please fill in all required fields correctly.</p>';
+            
+            // Remove existing error message if any
+            const existingError = form.querySelector('.form-errors');
+            if (existingError && !existingError.querySelector('ul')) {
+                existingError.remove();
+            }
+            
+            // Insert error message at top of form
+            if (!form.querySelector('.form-errors')) {
+                form.insertBefore(errorDiv, form.firstChild);
+            }
+            
+            // Scroll to first error
+            const firstError = form.querySelector('.error');
+            if (firstError) {
+                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                firstError.focus();
+            }
+        } else {
+            // Add loading state to button
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+        }
+    });
+    
+    function validateField(field) {
+        const value = field.value.trim();
+        const fieldName = field.name;
+        let isValid = true;
+        let errorMessage = '';
+        
+        // Remove existing error message
+        const existingError = field.parentElement.querySelector('.error-message.client-side');
+        if (existingError) {
+            existingError.remove();
+        }
+        
+        // Check if field is empty
+        if (field.hasAttribute('required') && value === '') {
+            isValid = false;
+            errorMessage = `${field.labels[0].textContent.replace('*', '').trim()} is required.`;
+        }
+        
+        // Field-specific validation
+        if (value !== '') {
+            switch(fieldName) {
+                case 'firstname':
+                case 'lastname':
+                    if (value.length < 2) {
+                        isValid = false;
+                        errorMessage = 'Must be at least 2 characters.';
+                    }
+                    if (fieldName === 'firstname' && value.toLowerCase() === 'unknown') {
+                        isValid = false;
+                        errorMessage = 'Please enter a valid first name.';
+                    }
+                    if (fieldName === 'lastname' && value.toLowerCase() === 'member') {
+                        isValid = false;
+                        errorMessage = 'Please enter a valid last name.';
+                    }
+                    break;
+                    
+                case 'email':
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(value)) {
+                        isValid = false;
+                        errorMessage = 'Please enter a valid email address.';
+                    }
+                    break;
+                    
+                case 'phoneNumber':
+                    const cleaned = value.replace(/[-\s()]/g, '');
+                    if (value === '000-000-0000') {
+                        isValid = false;
+                        errorMessage = 'Please enter a valid phone number.';
+                    } else if (!/^\d+$/.test(cleaned)) {
+                        isValid = false;
+                        errorMessage = 'Phone number should contain only digits.';
+                    } else if (cleaned.length < 10) {
+                        isValid = false;
+                        errorMessage = 'Phone number must be at least 10 digits.';
+                    }
+                    break;
+                    
+                case 'city':
+                case 'location':
+                    if (value.toLowerCase() === 'not specified') {
+                        isValid = false;
+                        errorMessage = 'Please enter a valid ' + fieldName + '.';
+                    }
+                    break;
+            }
+        }
+        
+        // Update field styling
+        if (isValid) {
+            field.classList.remove('error');
+            field.classList.add('valid');
+        } else {
+            field.classList.remove('valid');
+            field.classList.add('error');
+            
+            // Add error message
+            if (errorMessage) {
+                const errorSpan = document.createElement('span');
+                errorSpan.className = 'error-message client-side';
+                errorSpan.textContent = errorMessage;
+                field.parentElement.appendChild(errorSpan);
+            }
+        }
+        
+        return isValid;
+    }
+});
+</script>
+{% endblock %}

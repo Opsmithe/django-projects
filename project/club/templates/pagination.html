@@ -1,35 +1,33 @@
 {% if page.has_other_pages %}
-<div style="display: flex; justify-content: center; align-items: center; gap: 10px; margin: 40px 0; flex-wrap: wrap;">
-    
+<div class="pagination">
     {% if page.has_previous %}
-        <a href="?page=1" class="btn" style="padding: 8px 12px; font-size: 0.9rem;">« First</a>
-        <a href="?page={{ page.previous_page_number }}" class="btn" style="padding: 8px 12px; font-size: 0.9rem;">‹ Previous</a>
+        <a href="?page=1" class="btn pagination-btn">« First</a>
+        <a href="?page={{ page.previous_page_number }}" class="btn pagination-btn">‹ Previous</a>
     {% else %}
-        <span style="padding: 8px 12px; color: rgba(255,255,255,0.5); font-size: 0.9rem;">« First</span>
-        <span style="padding: 8px 12px; color: rgba(255,255,255,0.5); font-size: 0.9rem;">‹ Previous</span>
+        <span class="pagination-disabled">« First</span>
+        <span class="pagination-disabled">‹ Previous</span>
     {% endif %}
     
-    <div style="display: flex; gap: 5px; align-items: center;">
+    <div class="pagination-numbers">
         {% for num in page.paginator.page_range %}
             {% if page.number == num %}
-                <span style="padding: 8px 12px; background: white; color: #667eea; border-radius: 5px; font-weight: bold;">{{ num }}</span>
+                <span class="pagination-current">{{ num }}</span>
             {% elif num > page.number|add:'-3' and num < page.number|add:'3' %}
-                <a href="?page={{ num }}" style="padding: 8px 12px; background: rgba(255,255,255,0.2); color: white; border-radius: 5px; text-decoration: none; transition: background 0.3s;">{{ num }}</a>
+                <a href="?page={{ num }}" class="pagination-number">{{ num }}</a>
             {% endif %}
         {% endfor %}
     </div>
     
     {% if page.has_next %}
-        <a href="?page={{ page.next_page_number }}" class="btn" style="padding: 8px 12px; font-size: 0.9rem;">Next ›</a>
-        <a href="?page={{ page.paginator.num_pages }}" class="btn" style="padding: 8px 12px; font-size: 0.9rem;">Last »</a>
+        <a href="?page={{ page.next_page_number }}" class="btn pagination-btn">Next ›</a>
+        <a href="?page={{ page.paginator.num_pages }}" class="btn pagination-btn">Last »</a>
     {% else %}
-        <span style="padding: 8px 12px; color: rgba(255,255,255,0.5); font-size: 0.9rem;">Next ›</span>
-        <span style="padding: 8px 12px; color: rgba(255,255,255,0.5); font-size: 0.9rem;">Last »</span>
+        <span class="pagination-disabled">Next ›</span>
+        <span class="pagination-disabled">Last »</span>
     {% endif %}
-    
 </div>
 
-<div style="text-align: center; color: white; font-size: 0.9rem; margin-top: 10px;">
+<div class="pagination-info">
     Page {{ page.number }} of {{ page.paginator.num_pages }} | 
     Showing {{ page.start_index }} - {{ page.end_index }} of {{ page.paginator.count }} members
 </div>

@@ -18,7 +18,7 @@
    - ✓ Command Line Tools
 5. Choose data directory (default: `C:\Program Files\PostgreSQL\16\data`)
 6. **Set password for postgres superuser** (IMPORTANT: Remember this password!)
-7. Set port number (default: `5432`)
+7. Set port number (d efault: `5432`)
 8. Select locale (default: `[Default locale]`)
 9. Review installation summary and click "Next"
 10. Wait for installation to complete

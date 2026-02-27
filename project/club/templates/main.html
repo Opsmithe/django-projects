@@ -1,37 +1,78 @@
 {% extends "base.html" %}
 
 {% block title %}
-  My Tennis Club APP
+Welcome - My Tennis Club
 {% endblock %}
 
 {% block content %}
-  <div style="max-width: 1200px; margin: 0 auto;">
+<div class="container">
+    <!-- Authentication Navigation -->
+    <div class="auth-nav">
+        {% if user.is_authenticated %}
+            <span class="welcome-text">Welcome, {{ user.username }}!</span>
+            <a href="{% url 'club:profile' %}" class="auth-link">Profile</a>
+            <a href="{% url 'club:logout' %}" class="auth-link">Logout</a>
+        {% else %}
+            <a href="{% url 'club:login' %}" class="auth-link">Login</a>
+            <a href="{% url 'club:register' %}" class="auth-link">Register</a>
+        {% endif %}
+    </div>
+    
     <h1>Welcome to My Tennis Club</h1>
     
-    <div style="text-align: center; margin: 40px 0;">
-      <p style="font-size: 1.2rem; margin-bottom: 30px; color: white;">
-        Join our exclusive tennis community and connect with fellow players!
-      </p>
-      
-      <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-        <a href="{% url 'club:members' %}" class="btn">View All Members</a>
-        <a href="{% url 'club:testing' %}" class="btn">Test Features</a>
-      </div>
+    <div class="text-center mt-4">
+        <p class="text-white mb-3" style="font-size: 1.2rem;">
+            Join our exclusive tennis community and connect with fellow players!
+        </p>
+        
+        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+            <a href="{% url 'club:members' %}" class="btn">View All Members</a>
+            <a href="{% url 'club:testing' %}" class="btn">Test Features</a>
+        </div>
     </div>
     
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 40px;">
-      <div style="background: white; padding: 30px; border-radius: 10px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <h3 style="color: #667eea; margin-bottom: 10px; font-size: 1.5rem;">🏆 Tournaments</h3>
-        <p style="color: #666;">Participate in exciting tournaments and competitions</p>
-      </div>
-      <div style="background: white; padding: 30px; border-radius: 10px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <h3 style="color: #667eea; margin-bottom: 10px; font-size: 1.5rem;">👥 Community</h3>
-        <p style="color: #666;">Connect with players from different locations</p>
-      </div>
-      <div style="background: white; padding: 30px; border-radius: 10px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <h3 style="color: #667eea; margin-bottom: 10px; font-size: 1.5rem;">📅 Events</h3>
-        <p style="color: #666;">Stay updated with club events and activities</p>
-      </div>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <h3 class="feature-title"><span class="feature-icon">🏆</span> Tournaments</h3>
+            <p class="feature-description">Participate in exciting tournaments and competitions</p>
+        </div>
+        <div class="feature-card">
+            <h3 class="feature-title"><span class="feature-icon">👥</span> Community</h3>
+            <p class="feature-description">Connect with players from different locations</p>
+        </div>
+        <div class="feature-card">
+            <h3 class="feature-title"><span class="feature-icon">📅</span> Events</h3>
+            <p class="feature-description">Stay updated with club events and activities</p>
+        </div>
     </div>
-  </div>
+</div>
+
+<style>
+.auth-nav {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.welcome-text {
+    color: white;
+    font-weight: 500;
+}
+
+.auth-link {
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.auth-link:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+</style>
 {% endblock %}

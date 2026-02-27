@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}
+Page Not Found - Tennis Club
+{% endblock %}
+
+{% block content %}
+<div class="error-container">
+    <div class="error-icon">🎾</div>
+    
+    <h1 class="error-code">404</h1>
+    
+    <h2 class="error-title">Page Not Found</h2>
+    
+    <p class="error-message">
+        Oops! The page you're looking for seems to have left the court. 
+        It might have been removed, had its name changed, or is temporarily unavailable.
+    </p>
+    
+    <div class="error-help">
+        <p style="color: #666; margin-bottom: 15px;">
+            <strong>What you can do:</strong>
+        </p>
+        <ul>
+            <li>✓ Check the URL for typos</li>
+            <li>✓ Go back to the previous page</li>
+            <li>✓ Visit our homepage</li>
+        </ul>
+    </div>
+    
+    <div class="error-actions">
+        <a href="{% url 'club:main' %}" class="btn">🏠 Go Home</a>
+        <a href="{% url 'club:members' %}" class="btn">👥 View Members</a>
+        <a href="javascript:history.back()" class="btn btn-secondary">← Go Back</a>
+    </div>
+    
+    <p class="error-footer">
+        Error Code: 404 | Page Not Found
+    </p>
+</div>
+{% endblock %}

@@ -116,3 +116,76 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'club' / 'static',
+]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# ===================================
+# MEDIA FILES CONFIGURATION
+# ===================================
+
+# Media files (User uploaded files)
+# These are files uploaded by users (profile pictures, documents, etc.)
+
+# URL that handles the media served from MEDIA_ROOT
+# Example: http://localhost:8000/media/profile_pics/john_doe.jpg
+MEDIA_URL = '/media/'
+
+# Absolute filesystem path to the directory that will hold user-uploaded files
+# Files will be stored in: project/media/
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Maximum upload file size (in bytes)
+# 5MB = 5 * 1024 * 1024 bytes
+FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB
+
+# Allowed image file extensions
+ALLOWED_IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/6.0/ref/settings/#default-auto-field
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# ===================================
+# EMAIL CONFIGURATION
+# ===================================
+
+# Email Backend Configuration
+# For development: Console backend (prints emails to console)
+# For production: SMTP backend (sends real emails)
+
+# Development - Email prints to console
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Production - SMTP Configuration (commented out for development)
+# Uncomment and configure these settings for production use
+"""
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # Gmail SMTP server
+EMAIL_PORT = 587  # TLS port
+EMAIL_USE_TLS = True  # Use TLS encryption
+EMAIL_HOST_USER = 'your-email@gmail.com'  # Your email address
+EMAIL_HOST_PASSWORD = 'your-app-password'  # App password (not regular password)
+DEFAULT_FROM_EMAIL = 'Tennis Club <your-email@gmail.com>'
+"""
+
+# Default email settings
+DEFAULT_FROM_EMAIL = 'Tennis Club <noreply@tennisclub.com>'
+ADMINS = [('Admin', 'admin@tennisclub.com')]
+MANAGERS = ADMINS
+
+# Email timeout (in seconds)
+EMAIL_TIMEOUT = 10
+
+
+# ===================================
+# AUTHENTICATION CONFIGURATION
+# ===================================
+
+# Login/Logout redirect URLs
+LOGIN_URL = 'club:login'
+LOGIN_REDIRECT_URL = 'club:main'
+LOGOUT_REDIRECT_URL = 'club:main'
